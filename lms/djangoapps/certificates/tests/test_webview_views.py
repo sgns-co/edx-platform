@@ -5,6 +5,7 @@
 import datetime
 import json
 from collections import OrderedDict
+from urllib.parse import urlencode
 from uuid import uuid4
 
 import ddt
@@ -14,7 +15,7 @@ from django.test.client import Client, RequestFactory
 from django.test.utils import override_settings
 from django.urls import reverse
 from mock import patch
-from urllib.parse import urlencode
+from organizations import api as organizations_api
 
 from course_modes.models import CourseMode
 from lms.djangoapps.badges.events.course_complete import get_completion_badge
@@ -51,7 +52,6 @@ from openedx.core.lib.tests.assertions.events import assert_event_matches
 from student.roles import CourseStaffRole
 from student.tests.factories import CourseEnrollmentFactory, UserFactory
 from track.tests import EventTrackingTestCase
-from util import organizations_helpers as organizations_api
 from util.date_utils import strftime_localized
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
@@ -410,7 +410,7 @@ class CertificatesViewsTests(CommonCertificatesTestCase, CacheIsolationTestCase)
             'logo': '/logo_test1.png/'
         }
         test_org = organizations_api.add_organization(organization_data=test_organization_data)
-        organizations_api.add_organization_course(organization_data=test_org, course_id=six.text_type(self.course.id))
+        organizations_api.add_organization_course(organization_data=test_org, course_key=six.text_type(self.course.id))
         self._add_course_certificates(count=1, signatory_count=1, is_active=True)
         test_url = get_certificate_url(
             user_id=self.user.id,
@@ -480,7 +480,7 @@ class CertificatesViewsTests(CommonCertificatesTestCase, CacheIsolationTestCase)
             'logo': '/logo_test1.png'
         }
         test_org = organizations_api.add_organization(organization_data=test_organization_data)
-        organizations_api.add_organization_course(organization_data=test_org, course_id=six.text_type(self.course.id))
+        organizations_api.add_organization_course(organization_data=test_org, course_key=six.text_type(self.course.id))
         self._add_course_certificates(count=1, signatory_count=1, is_active=True)
         badge_class = get_completion_badge(course_id=self.course_id, user=self.user)
         BadgeAssertionFactory.create(
