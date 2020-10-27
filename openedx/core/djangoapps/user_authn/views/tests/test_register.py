@@ -1722,7 +1722,10 @@ class RegistrationViewTestV1(ThirdPartyAuthTestMixin, UserAPITestCase):
 
 @ddt.ddt
 class RegistrationViewTestV2(RegistrationViewTestV1):
+    """
+    Test for registration api V2
 
+    """
     def setUp(self):  # pylint: disable=arguments-differ
         super(RegistrationViewTestV1, self).setUp()
         self.url = reverse("user_api_registration_v2")
