@@ -119,10 +119,10 @@ class TestCourseListing(ModuleStoreTestCase):
             self.assertTrue(course.cert_html_view_enabled)
 
     @ddt.data(ModuleStoreEnum.Type.mongo, ModuleStoreEnum.Type.split)
-    @override_settings(ORGANIZATIONS_ENABLE_STRICTNESS=False)
+    @override_settings(ORGANIZATIONS_AUTOCREATE=True)
     def test_course_creation_for_unknown_organization_relaxed(self, store):
         """
-        Tests that when ORGANIZATIONS_ENABLE_STRICTNESS is False,
+        Tests that when ORGANIZATIONS_AUTOCREATE is True,
         creating a course-run with an unknown org slug will create an organization
         and organization-course linkage in the system.
         """
@@ -144,10 +144,10 @@ class TestCourseListing(ModuleStoreTestCase):
             self.assertEqual(course_orgs[0]['short_name'], 'orgX')
 
     @ddt.data(ModuleStoreEnum.Type.mongo, ModuleStoreEnum.Type.split)
-    @override_settings(ORGANIZATIONS_ENABLE_STRICTNESS=True)
+    @override_settings(ORGANIZATIONS_AUTOCREATE=False)
     def test_course_creation_for_unknown_organization_strict(self, store):
         """
-        Tests that when ORGANIZATIONS_ENABLE_STRICTNESS is True,
+        Tests that when ORGANIZATIONS_AUTOCREATE is False,
         creating a course-run with an unknown org slug will raise a validation error.
         """
         with modulestore().default_store(store):
@@ -163,8 +163,8 @@ class TestCourseListing(ModuleStoreTestCase):
             data = parse_json(response)
             self.assertIn(u'Organization you selected does not exist in the system', data['error'])
 
-    @ddt.data(False, True)
-    def test_course_creation_for_known_organization(self, enable_strict_organizations):
+    @ddt.data(True, False)
+    def test_course_creation_for_known_organization(self, organizations_autocreate):
         """
         Tests course creation workflow when course organization exist in system.
         """
@@ -173,7 +173,7 @@ class TestCourseListing(ModuleStoreTestCase):
             'short_name': 'orgX',
             'description': 'Testing Organization Description',
         })
-        with override_settings(ORGANIZATIONS_ENABLE_STRICTNESS=enable_strict_organizations):
+        with override_settings(ORGANIZATIONS_AUTOCREATE=organizations_autocreate):
             response = self.client.ajax_post(self.course_create_rerun_url, {
                 'org': 'orgX',
                 'number': 'CS101',
