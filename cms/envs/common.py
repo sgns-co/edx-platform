@@ -2303,14 +2303,17 @@ MAX_BLOCKS_PER_CONTENT_LIBRARY = 1000
 
 ######################## Setting for Organizations ########################
 
-# .. toggle_name: ORGANIZATIONS_ENABLE_STRICTNESS
+# .. toggle_name: ORGANIZATIONS_AUTOCREATE
 # .. toggle_implementation: DjangoSetting
-# .. toggle_default: False
-# .. toggle_description: Set to True to enforce that Organization references in new
-#   content (such as the "org" slugs on course runs and content libraries) must refer
-#   to Organizations already existing in the database. If left as False, then creating
-#   content referencing an unknown Organization will cause a new Organization to
-#   automatically be created.
+# .. toggle_default: True
+# .. toggle_description: When enabled, creating a course run or content library with
+#   an "org slug" that does not map to an Organization in the database will trigger the
+#   creation of a new Organization, with its name and short_name set to said org slug.
+#   When disabled, creation of such content with an unknown org slug will instead
+#   result in a validation error.
+#   If you want the Organization table to be an authoritative information source in
+#   Studio, then disable this; however, if you want the table to just be a reflection of
+#   the orgs referenced in Studio content, then leave it enabled.
 # .. toggle_use_cases: open_edx
-# .. toggle_creation_date: 2020-09-29
-ORGANIZATIONS_ENABLE_STRICTNESS = False
+# .. toggle_creation_date: 2020-11-02
+ORGANIZATIONS_AUTOCREATE = True
