@@ -7,7 +7,7 @@ from mock import patch
 from rest_framework.test import APIRequestFactory
 from waffle.testutils import override_switch
 
-from student.tests.factories import UserFactory
+from common.djangoapps.student.tests.factories import UserFactory
 
 from .. import WaffleFlag, WaffleFlagNamespace, WaffleSwitch, WaffleSwitchNamespace
 from ..testutils import override_waffle_flag
