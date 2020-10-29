@@ -481,12 +481,23 @@ class LoncapaResponse(six.with_metaclass(abc.ABCMeta, object)):
                 'old_cmap_dict': old_cmap.get_dict(),
             }
 
+            # We allow context-specific overrides for limits in the safe executation environment.
+            # If available, we use this response's stringified course key to identify the set
+            # of overrides we want to use, allowing us to tweak limits for particular course
+            # runs via Django settings.
+            # If the course key is not available, fall back to None (no overrides).
+            try:
+                limit_overrides_context = str(self.capa_module.scope_ids.usage_id.course_key)
+            except AttributeError:
+                limit_overrides_context = None
+
             try:
                 safe_exec.safe_exec(
                     code,
                     globals_dict,
                     python_path=self.context['python_path'],
                     extra_files=self.context['extra_files'],
+                    limit_overrides_context=limit_overrides_context,
                     slug=self.id,
                     random_seed=self.context['seed'],
                     unsafely=self.capa_system.can_execute_unsafe_code(),
