@@ -2590,7 +2590,7 @@ INSTALLED_APPS = [
     # Course teams
     'lms.djangoapps.teams',
 
-    'xblock_django',
+    'common.djangoapps.xblock_django',
 
     # programs support
     'openedx.core.djangoapps.programs.apps.ProgramsConfig',
