@@ -2531,7 +2531,7 @@ INSTALLED_APPS = [
     'openedx.core.djangoapps.enrollments',
 
     # Entitlement API
-    'entitlements.apps.EntitlementsConfig',
+    'common.djangoapps.entitlements.apps.EntitlementsConfig',
 
     # Bulk Enrollment API
     'lms.djangoapps.bulk_enroll',
