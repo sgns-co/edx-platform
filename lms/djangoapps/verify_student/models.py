@@ -669,6 +669,21 @@ class SoftwareSecurePhotoVerification(PhotoVerification):
 
         return init_verification.latest('created_at') if init_verification.exists() else None
 
+    @property
+    def expiration_datetime(self):
+        """
+        Datetime that the verification will expire.
+
+        The datetime returned should be the one generated when the Software
+        Secure photo verification has been approved, which can take several
+        days from the time of creation. If it hasn't been approved, it will
+        default to the original method of returning the expiration based on
+        creation date.
+        """
+        if self.expiry_date:
+            return self.expiry_date
+        return super(SoftwareSecurePhotoVerification, self).expiration_datetime
+
     @status_before_must_be("created")
     def upload_face_image(self, img_data):
         """
