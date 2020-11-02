@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
+from ratelimit.decorators import ratelimit
 
 import third_party_auth
 from edxmako.shortcuts import render_to_response
@@ -35,7 +36,6 @@ from openedx.features.enterprise_support.utils import (
     handle_enterprise_cookies_for_logistration,
     update_logistration_context_for_enterprise
 )
-from ratelimit.decorators import ratelimit
 from student.helpers import get_next_url_for_login_page
 from third_party_auth import pipeline
 from third_party_auth.decorators import xframe_allow_whitelisted
