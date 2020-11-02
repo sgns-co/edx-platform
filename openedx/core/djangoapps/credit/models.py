@@ -97,7 +97,7 @@ class CreditProvider(TimeStampedModel):
         default=u"",
         help_text=ugettext_lazy(
             "URL from the credit provider where the user can check the status "
-            "of his or her request for credit.  This is displayed to students "
+            "of their request for credit.  This is displayed to students "
             "*after* they have requested credit."
         )
     )
