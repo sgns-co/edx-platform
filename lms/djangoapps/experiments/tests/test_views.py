@@ -335,8 +335,9 @@ class ExperimentUserMetaDataViewTests(APITestCase, ModuleStoreTestCase):
         lookup_course = CourseFactory.create(start=now() - timedelta(days=30))
         call_args = [lookup_user.username, lookup_course.id]
         self.client.login(username=lookup_user.username, password=UserFactory._DEFAULT_PASSWORD)
+        bogus_course_name = str(lookup_course.id) + '_FOOBAR'
 
-        call_args_with_bogus_course = [lookup_user.username, 'course-v1:edX+DemoX+Demo_BOGUS']
+        call_args_with_bogus_course = [lookup_user.username, bogus_course_name]
         response = self.client.get(reverse('api_experiments:user_metadata', args=call_args_with_bogus_course))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()['message'], 'Provided course is not found')
