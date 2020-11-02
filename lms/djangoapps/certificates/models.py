@@ -42,7 +42,7 @@ Eligibility:
        he will never be issued a certificate.
 
        If the user and course is present in the certificate whitelist table
-       then the student will be issued a certificate regardless of his grade,
+       then the student will be issued a certificate regardless of their grade,
        unless he has allow_certificate set to False.
 """
 
