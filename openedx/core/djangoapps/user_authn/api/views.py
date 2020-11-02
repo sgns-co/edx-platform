@@ -16,8 +16,7 @@ class ThirdPartyAuthContextThrottle(AnonRateThrottle):
     """
     Setting rate limit for ThirdPartyAuthContext API
     """
-    # TODO: update this
-    rate = '10/m'
+    rate = '20/m'
 
 
 class ThirdPartyAuthContext(APIView):
