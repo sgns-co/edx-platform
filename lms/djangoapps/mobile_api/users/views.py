@@ -4,6 +4,8 @@ Views for user API
 
 
 import six
+from completion.utilities import get_key_to_last_completed_block
+from completion.exceptions import UnavailableCompletionData
 from django.contrib.auth.signals import user_logged_in
 from django.shortcuts import redirect
 from django.utils import dateparse
@@ -83,6 +85,8 @@ class UserCourseStatus(views.APIView):
         Get or update the ID of the module that the specified user last
         visited in the specified course.
 
+        Get ID of the last completed block in case of version v1
+
     **Example Requests**
 
         GET /api/mobile/{version}/users/{username}/course_status_info/{course_id}
@@ -110,6 +114,11 @@ class UserCourseStatus(views.APIView):
           visited in the course.
         * last_visited_module_path: The ID of the modules in the path from the
           last visited module to the course module.
+
+        For version v1 GET request response has the following values.
+
+        * last_visited_block_id: ID of the last completed block.
+
     """
 
     http_method_names = ["get", "patch"]
@@ -180,11 +189,23 @@ class UserCourseStatus(views.APIView):
 
     @mobile_course_access(depth=2)
     def get(self, request, course, *args, **kwargs):
-        """
-        Get the ID of the module that the specified user last visited in the specified course.
-        """
+        api_version = self.kwargs.get('api_version')
 
-        return self._get_course_info(request, course)
+        if api_version == API_V05:
+            """
+            Get the ID of the module that the specified user last visited in the specified course.
+            """
+            return self._get_course_info(request, course)
+
+        """
+        Get ID of the block that the specified user last visited in the specified course.
+        """
+        try:
+            block_id = get_key_to_last_completed_block(request.user, course.id)
+        except UnavailableCompletionData:
+            block_id = ''
+
+        return Response({"block_id": block_id})
 
     @mobile_course_access(depth=2)
     def patch(self, request, course, *args, **kwargs):
