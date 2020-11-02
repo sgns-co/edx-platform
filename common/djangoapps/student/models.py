@@ -939,7 +939,7 @@ class LoginFailures(models.Model):
     @classmethod
     def is_user_locked_out(cls, user):
         """
-        Static method to return in a given user has his/her account locked out
+        Static method to return in a given user has their account locked out
         """
         try:
             record = cls._get_record_for_user(user)
