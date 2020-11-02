@@ -319,6 +319,10 @@ class ExperimentUserMetaDataViewTests(APITestCase, ModuleStoreTestCase):
 
         response = self.client.get(reverse('api_experiments:user_metadata', args=call_args))
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['course_id'])
+        self.assertTrue(response.json()['user_id'])
+        self.assertEqual(response.json()['username'], lookup_user.username)
+        self.assertEqual(response.json()['email'], lookup_user.email)
 
     def test_UserMetaDataView_get_different_user(self):
         """ Request fails when not logged in for requested user or staff  """
